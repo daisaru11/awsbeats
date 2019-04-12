@@ -2,6 +2,8 @@ package streams
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
@@ -11,7 +13,6 @@ import (
 	"github.com/elastic/beats/libbeat/outputs/codec"
 	"github.com/elastic/beats/libbeat/outputs/codec/json"
 	"github.com/elastic/beats/libbeat/publisher"
-	"time"
 )
 
 type client struct {
@@ -35,9 +36,12 @@ func newClient(sess *session.Session, config *StreamsConfig, observer outputs.Ob
 		streamName:           config.DeliveryStreamName,
 		partitionKeyProvider: partitionKeyProvider,
 		beatName:             beat.Beat,
-		encoder:              json.New(false, true, beat.Version),
-		timeout:              config.Timeout,
-		observer:             observer,
+		encoder: json.New(beat.Version, json.Config{
+			Pretty:     false,
+			EscapeHTML: false,
+		}),
+		timeout:  config.Timeout,
+		observer: observer,
 	}
 
 	return client, nil

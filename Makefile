@@ -2,7 +2,7 @@ MAKE_VARIABLES := $(.VARIABLES)
 
 GO_VERSION=$(shell go version | cut -d ' ' -f 3 | sed -e 's/ /-/g' | sed -e 's/\//-/g' | sed -e 's/^go//g')
 GO_PLATFORM ?= $(shell go version | cut -d ' ' -f 4 | sed -e 's/ /-/g' | sed -e 's/\//-/g')
-BEATS_VERSION ?= "6.5.4"
+BEATS_VERSION ?= "7.0.0"
 BEATS_TAG ?= $(shell echo ${BEATS_VERSION} | sed 's/[^[:digit:]]*\([[:digit:]]*\(\.[[:digit:]]*\)\)/v\1/')
 AWSBEATS_VERSION ?= $(shell script/version)
 BEAT_NAME ?= filebeat
@@ -60,7 +60,7 @@ ifneq ($(GOPATH)/src/$(BEAT_GITHUB_REPO),$(GOPATH)/src/github.com/elastic/beats)
 	go get github.com/spf13/pflag
 endif
 	@cd "$$GOPATH/src/$(BEAT_GO_PKG)" &&\
-	make &&\
+	make $(BEAT_NAME) &&\
 	mv $(BEAT_NAME) "$(CURDIR)/target/$(BEAT_NAME)-$(BEATS_VERSION)-go$(GO_VERSION)-$(GO_PLATFORM)"
 else
 	$(error BEATS_VERSION is undefined)
