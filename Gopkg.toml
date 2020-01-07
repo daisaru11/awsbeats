@@ -2,7 +2,7 @@ ignored = ["github.com/elastic/beats*"]
 
 [[constraint]]
   name = "github.com/aws/aws-sdk-go"
-  version = "1.16.14"
+  version = "1.27.1"
 
 [prune]
   go-tests = true
